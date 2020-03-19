@@ -3,24 +3,26 @@ from pages.home.login_page import LoginPage
 import unittest
 import pytest
 
+@pytest.mark.usefixtures("oneTimeSetUp", "setUp")
 class LoginTests(unittest.TestCase):
-    baseURL = "https://letskodeit.teachable.com/"
-    driver = webdriver.Chrome()
-    driver.maximize_window()
-    driver.implicitly_wait(3)
-    lp = LoginPage(driver)
+
+    @pytest.fixture(autouse=True)
+    def classSetup(self, oneTimeSetUp):
+        self.lp = LoginPage(self.driver)
+
 
     @pytest.mark.run(order=2)
     def test_validLogin(self):
-        self.lp.clearFields()
         self.lp.login("test@email.com", "abcabc")
-        result = self.lp.verifyLoginSuccessful()
-        assert result == True
-        self.driver.quit()
+        #result1 = self.lp.verifyTitle()
+        #assert result1 == True
+        result2 = self.lp.verifyLoginSuccessful()
+        assert result2 == True
+
+
 
     @pytest.mark.run(order=1)
     def test_invalidLogin(self):
-        self.driver.get(self.baseURL)
         self.lp.login("test@email.com", "abcabcabc")
         result = self.lp.verifyLoginFailed()
         assert result == True
