@@ -53,7 +53,7 @@ class LoginPage(SeleniumDriver):
         passwordField.clear()
 
     def verifyTitle(self):
-        if "Let's Kode it" in self.getTitle():
+        if "Let's Kode It" in self.getTitle():
             return True
         else:
             return False
